@@ -3,7 +3,6 @@ import {View, StyleSheet, ImageBackground, TouchableWithoutFeedback, Keyboard, A
 import { Text, Input, Icon } from "@ui-kitten/components";
 
 import Colors from "../../constants/Colors";
-import bg from "../../assets/images/cinema-bg.png";
 
 const LandingScreen = props => {
     const [searchInput, setSearchInput] = useState("");
@@ -36,7 +35,7 @@ const LandingScreen = props => {
 
     return <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()} style={{flex: 1}}>
         <View style={styles.screen}>
-            <ImageBackground source={bg} style={styles.imageBg}>
+            {/* <ImageBackground source={bg} style={styles.imageBg}> */}
                 <View style={styles.container}>
                     <Text category="h1" style={styles.space}>Welcome.</Text>
                     <Text category="h5" style={styles.space}>Millions of movies, TV shows and people to discover. Explore now.</Text>
@@ -44,13 +43,15 @@ const LandingScreen = props => {
                         placeholder="Search a movie, tv show, person..."
                         value={searchInput}
                         returnKeyType="search"
+                        autoCorrect={false}
+                        autoCompleteType="off"
                         size="medium"
                         style={styles.space}
                         accessoryRight={searchButton}
                         onChangeText={text => setSearchInput(text)}
                     />
                 </View>
-            </ImageBackground>
+            {/* </ImageBackground> */}
 
             <View style={styles.container}>
                 <Text category="h4">Recent Searches</Text>
@@ -62,7 +63,7 @@ const LandingScreen = props => {
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: Colors.dark
+        backgroundColor: Colors.light
     },
     imageBg: {
         width: "100%",
@@ -71,8 +72,8 @@ const styles = StyleSheet.create({
         padding: 20
     },
     space: {
-        marginVertical: 8
-    },
+        marginVertical: 10
+    }
 });
 
 export default LandingScreen;

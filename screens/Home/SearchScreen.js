@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from "react";
-import {View, StyleSheet, ScrollView, Alert} from "react-native";
-import { Text, Spinner } from "@ui-kitten/components"
+import {View, StyleSheet, Alert, SafeAreaView} from "react-native";
+import { Text, Spinner, List, Divider } from "@ui-kitten/components"
 
+import Item from "../../components/UI/Item";
 import { REACT_APP_TMDB_API_KEY } from "@env";
 import Colors from "../../constants/Colors";
 
@@ -12,6 +13,30 @@ const SearchScreen = props => {
 
     const query = props.navigation.getParam("query");
     const api_key = REACT_APP_TMDB_API_KEY;
+
+    const renderItem = ({item}) => (
+        <Item
+            item={item}
+            onItemPress={handleItemPress}
+        />
+    )
+
+    const handleItemPress = (id, mediaType) => {
+        let routeName = "";
+
+        if (mediaType === "tv") {
+            routeName = "TvDetails"
+        } else if ( mediaType === "movie" ) {
+            routeName = "MovieDetails"
+        } else if ( mediaType === "person" ) {
+            routeName = "PersonDetails"
+        }
+
+        props.navigation.navigate({
+            routeName,
+            params: { mediaId: id }
+        })
+    }
 
     const fetchQuery = useCallback(
         async () => {
@@ -29,7 +54,6 @@ const SearchScreen = props => {
                 }
     
                 const result = await response.json();
-                console.log(result.results.length);
                 setQueryResult(result.results);
             } catch (err) {
                 setError(err.message);
@@ -41,31 +65,18 @@ const SearchScreen = props => {
     );
 
     useEffect(() => {
-        // fetch(`https://api.themoviedb.org/3/search/multi?api_key=f4d99b3567fb217391c6e1132d107acb&query=${query}`, {
-        //     method: "GET",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     }
-        // })
-        // .then(response => response.json())
-        // .then(result => console.log(result.results))
-        // .catch(err => console.log(err.message))
-        // .finally(() => setIsLoading(false));
-
         fetchQuery();
     }, [fetchQuery]);
 
     useEffect(() => {
         if (error !== null) {
-            Alert.alert("Oops!", error, [
-                {
-                    text: "Go Back",
-                    style: "destructive",
-                    onPress: () => {
-                        props.navigation.pop()
-                    }
+            Alert.alert("Oops!", error, [{
+                text: "Go Back",
+                style: "destructive",
+                onPress: () => {
+                    props.navigation.pop()
                 }
-            ])
+            }])
         }
     }, [error])
 
@@ -74,21 +85,38 @@ const SearchScreen = props => {
             <Spinner size="large" />
         </View>
     }
-    return <ScrollView style={styles.screen}>
-        <Text>{query}</Text>
-    </ScrollView>
+    return <View style={styles.screen}>
+        { queryResult.length === 0 ? <View>
+            <Text>Nothnig found matching '{query}'</Text>
+        </View> : 
+        <SafeAreaView style={styles.listContainer}>
+            <List
+                data={queryResult}
+                keyExtractor={(item) => `${item.id}`}
+                renderItem={renderItem}
+                ItemSeparatorComponent={Divider}
+                contentContainerStyle={styles.list}
+                showsHorizontalScrollIndicator={false}
+            />
+        </SafeAreaView> }
+    </View>
 };
 
 const styles = StyleSheet.create({
     screen: {
         flex: 1,
-        backgroundColor: Colors.dark,
-        padding: 20
+        backgroundColor: Colors.light
     },
     center: {
         flex: 1,
         justifyContent: "center",
         alignItems: "center"
+    },
+    space: {
+        marginVertical: 10
+    },
+    listContainer: {
+        flex: 1
     }
 });
 

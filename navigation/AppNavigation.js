@@ -7,18 +7,23 @@ import Colors from "../constants/Colors";
 import DetailsScreen from "../screens/Home/DetailsScreen";
 import LandingScreen from "../screens/Home/LandingScreen";
 import SearchScreen from "../screens/Home/SearchScreen";
-
+import TvDetailsScreen from "../screens/Home/Details/TvDetailsScreen";
+import MovieDetailsScreen from "../screens/Home/Details/MovieDetailsScreen";
+import PersonDetailsScreen from "../screens/Home/Details/PersonDetailsScreen";
 
 
 const HomeNavigator = createStackNavigator({
     Home: LandingScreen,
     Search: SearchScreen,
-    Details: DetailsScreen
+    TvDetails: TvDetailsScreen,
+    MovieDetails: MovieDetailsScreen,
+    PersonDetails: PersonDetailsScreen
 }, {
     defaultNavigationOptions: {
-        headerTintColor: Colors.primary,
+        headerTintColor: Colors.light,
+        headerBackTitleVisible: false,
         headerStyle: {
-            backgroundColor: Colors.darkVariant,
+            backgroundColor: Colors.primary,
             shadowOpacity: 0,
             elevation: 0
         }

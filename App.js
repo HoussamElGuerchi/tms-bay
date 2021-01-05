@@ -10,7 +10,7 @@ import AppNavigation from './navigation/AppNavigation';
 export default function App() {
   return <>
     <IconRegistry icons={EvaIconsPack} />
-    <ApplicationProvider {...eva} theme={eva.dark}>
+    <ApplicationProvider {...eva} theme={eva.light}>
       <StatusBar style="light" />
       <AppNavigation/>
     </ApplicationProvider>
